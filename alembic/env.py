@@ -6,7 +6,7 @@ import os
 
 # Importar Base y los modelos
 from app.database import Base
-from app.models import category, post  # importar ambos modelos
+from app.models import category, post
 
 load_dotenv()
 
