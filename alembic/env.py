@@ -3,15 +3,23 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 from dotenv import load_dotenv
 import os
+from pathlib import Path
 
 # Importar Base y los modelos
 from app.database import Base
 from app.models import category, post
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 config = context.config
-config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
+database_url = os.getenv("DATABASE_URL")
+if not database_url:
+    raise RuntimeError(
+        "DATABASE_URL no esta definida. Configurala en blog-backend/.env o en variables de entorno."
+    )
+
+config.set_main_option("sqlalchemy.url", database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
